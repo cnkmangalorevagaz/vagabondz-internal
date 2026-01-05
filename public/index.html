@@ -32,37 +32,86 @@
 
 <body>
   <div id="passwordOverlay" style="
-  position:fixed;
-  inset:0;
-  background:#1f2f5c;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  z-index:9999;
+  position: fixed;
+  inset: 0;
+  background: linear-gradient(135deg, #1f2f5c, #2f7d32);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  font-family: Arial, sans-serif;
 ">
   <div style="
-    background:white;
-    padding:30px;
-    border-radius:10px;
-    width:320px;
-    text-align:center;
+    background: #ffffff;
+    padding: 30px 25px;
+    border-radius: 12px;
+    width: 320px;
+    text-align: center;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.25);
   ">
-    <h3>Admin Access</h3>
+    
+    <!-- HEADER -->
+    <h2 style="
+      margin: 0;
+      margin-bottom: 5px;
+      color: #1f2f5c;
+    ">
+      ADMIN ONLY
+    </h2>
+
+    <p style="
+      margin-top: 0;
+      margin-bottom: 20px;
+      font-size: 13px;
+      color: #666;
+    ">
+      Authorized access required
+    </p>
+
+    <!-- PASSWORD INPUT -->
     <input
       type="password"
       id="adminPassword"
-      placeholder="Enter Password"
-      style="width:100%;padding:10px;margin:15px 0;"
+      placeholder="Enter admin password"
+      style="
+        width: 100%;
+        padding: 12px;
+        margin-bottom: 15px;
+        border-radius: 8px;
+        border: 1px solid #ccc;
+        font-size: 14px;
+        box-sizing: border-box;
+      "
     />
+
+    <!-- BUTTON -->
     <button
       onclick="checkPassword()"
-      style="width:100%;padding:10px;background:#2f7d32;color:white;border:none;border-radius:6px;"
+      style="
+        width: 100%;
+        padding: 12px;
+        background: #2f7d32;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-size: 15px;
+        font-weight: bold;
+        cursor: pointer;
+      "
     >
-      Enter
+      Login
     </button>
-    <p id="passError" style="color:red;display:none;margin-top:10px;">
+
+    <!-- ERROR -->
+    <p id="passError" style="
+      color: #e74c3c;
+      display: none;
+      margin-top: 12px;
+      font-size: 13px;
+    ">
       Incorrect password
     </p>
+
   </div>
 </div>
 <div id="appContent" style="display:none;">
@@ -234,18 +283,26 @@ function render(){
 
 function goToStaff(){ window.location.href="staff.html"; }
 
-const ADMIN_PASSWORD = "vagabondz@123"; // change anytime
+const ADMIN_PASSWORD = "vagabondz@123";
+
+// Auto-check on page load
+if (sessionStorage.getItem("adminAuth") === "true") {
+  document.getElementById("passwordOverlay").style.display = "none";
+  document.getElementById("appContent").style.display = "block";
+}
 
 function checkPassword() {
   const input = document.getElementById("adminPassword").value;
 
   if (input === ADMIN_PASSWORD) {
+    sessionStorage.setItem("adminAuth", "true");
     document.getElementById("passwordOverlay").style.display = "none";
     document.getElementById("appContent").style.display = "block";
   } else {
     document.getElementById("passError").style.display = "block";
   }
 }
+
 
 </script>
 
