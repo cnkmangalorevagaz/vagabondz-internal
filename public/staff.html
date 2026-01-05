@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Staff View</title>
+  <style>
+    body {
+      font-family: Arial;
+      background: #f5f5f5;
+      padding: 20px;
+    }
+
+    h2 {
+      text-align: center;
+      color: #1f2f5c;
+    }
+
+    /* BANNER */
+    .image-holder {
+      width: 100%;
+      height: 180px;
+      border-radius: 8px;
+      overflow: hidden;
+      margin-bottom: 20px;
+    }
+
+    .image-holder img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: white;
+    }
+
+    th, td {
+      border: 1px solid #ccc;
+      padding: 8px;
+      font-size: 14px;
+      text-align: center;
+    }
+
+    th {
+      background: #2f7d32;
+      color: white;
+    }
+
+    .box {
+      background: white;
+      padding: 15px;
+      margin-bottom: 15px;
+      border-radius: 6px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    select {
+      padding: 8px;
+    }
+
+    button {
+      padding: 8px 14px;
+      margin-left: 6px;
+      background: #2f7d32;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    .btn-pending { background: #f39c12; }
+    .btn-ongoing { background: #3498db; }
+
+    /* STATUS BADGES */
+    .status {
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: bold;
+      color: white;
+      display: inline-block;
+    }
+
+    .Pending { background: #f39c12; }
+    .Ongoing { background: #3498db; }
+    .Completed { background: #27ae60; }
+    .Confirmed { background: #2ecc71; }
+    .Cancelled { background: #e74c3c; }
+    .NoUpdate { background: #7f8c8d; }
+
+    /* PAGINATION */
+    .pagination {
+      text-align: center;
+      margin: 15px 0;
+    }
+
+    .pagination button {
+      background: #e0e0e0;
+      color: #000;
+      margin: 3px;
+    }
+
+    .pagination button.active {
+      background: #2f7d32;
+      color: white;
+    }
+.motivation-line {
+  text-align: left;
+  font-size: 17px;
+  color: #1f8622;
+  margin-top: 30px;
+  margin-bottom: 0px;
+  font-weight: bold; /* ← THIS makes it bold */
+}
+    footer {
+      background: #1f2f5c;
+      color: white;
+      padding: 15px;
+      text-align: center;
+      margin-top: 10px;
+      font-size: 14px;
+    }
+  </style>
+</head>
+
+<body>
+
+<!-- BANNER -->
+<div class="image-holder">
+  <img src="banner.png">
+</div>
+
+<h2>Staff Operations Dashboard</h2>
+
+<div class="box">
+  <div>
+    Select Your Name:
+    <select id="staffName">
+      <option value="">Select</option>
+      <option>CHETHANA</option>
+      <option>MALATHI</option>
+      <option>ABHISHEK</option>
+      <option>POORNIMA</option>
+      <option>ASHWITHA</option>
+    </select>
+    <button onclick="filterStaff()">View My Work</button>
+  </div>
+
+  <div>
+    <button class="btn-pending" onclick="filterPending()">Pending</button>
+    <button class="btn-ongoing" onclick="filterOngoing()">Ongoing</button>
+    <button onclick="filterStaff()">Show All</button>
+  </div>
+</div>
+
+<table id="staffTable"></table>
+
+<div class="pagination" id="pagination"></div>
+
+<script>
+let data = [];
+
+async function loadData() {
+  const res = await fetch("/api/entries");
+  data = await res.json();
+}
+
+loadData();
+const PER_PAGE = 20;
+let currentPage = 1;
+let currentList = [];
+
+function renderTable(list) {
+  const table = document.getElementById("staffTable");
+  const pagination = document.getElementById("pagination");
+
+  table.innerHTML = `
+    <tr>
+      <th>SL</th>
+      <th>Travel Date</th>
+      <th>Destination</th>
+      <th>Query Type</th>
+      <th>Client Name</th>
+      <th>Status</th>
+      <th>Remarks</th>
+      <th>Last Updated</th>
+    </tr>
+  `;
+
+  const totalPages = Math.ceil(list.length / PER_PAGE);
+  const start = (currentPage - 1) * PER_PAGE;
+  const pageData = list.slice(start, start + PER_PAGE);
+
+  pageData.forEach((item, index) => {
+    const row = table.insertRow();
+    row.insertCell(0).innerText = start + index + 1;
+    row.insertCell(1).innerText = item.travelDate || "-";
+    row.insertCell(2).innerText = item.destination || "-";
+    row.insertCell(3).innerText = item.query || "-";
+    row.insertCell(4).innerText = item.client || "-";
+
+    const cls = item.status ? item.status.replace(" ", "") : "NoUpdate";
+    row.insertCell(5).innerHTML =
+      `<span class="status ${cls}">${item.status || "No Update"}</span>`;
+
+    row.insertCell(6).innerText = item.remarks || "-";
+    row.insertCell(7).innerText = item.updatedAt || "-";
+  });
+
+  pagination.innerHTML = "";
+  for (let p = 1; p <= totalPages; p++) {
+    pagination.innerHTML +=
+      `<button class="${p === currentPage ? "active" : ""}"
+        onclick="currentPage=${p};renderTable(currentList)">${p}</button>`;
+  }
+}
+
+function baseFilter(name) {
+  return data
+    .filter(d => d.staff === name)
+    .sort((a, b) => {
+      const order = ["Pending","Ongoing","Confirmed","Completed","Cancelled"];
+      return order.indexOf(a.status) - order.indexOf(b.status);
+    });
+}
+
+function filterStaff() {
+  const name = staffName.value;
+  if (!name) return alert("Please select your name");
+  currentPage = 1;
+  currentList = baseFilter(name);
+  renderTable(currentList);
+}
+
+function filterPending() {
+  const name = staffName.value;
+  if (!name) return alert("Please select your name first");
+  currentPage = 1;
+  currentList = baseFilter(name).filter(d => d.status === "Pending");
+  renderTable(currentList);
+}
+
+function filterOngoing() {
+  const name = staffName.value;
+  if (!name) return alert("Please select your name first");
+  currentPage = 1;
+  currentList = baseFilter(name).filter(d => d.status === "Ongoing");
+  renderTable(currentList);
+}
+</script>
+<div class="motivation-line">
+ Consistency is the key to success.
+</div>
+<footer>
+  © 2025 All Rights Reserved | Vagabondz Internal Operations System
+</footer>
+
+</body>
+</html>

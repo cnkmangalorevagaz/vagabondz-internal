@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Internal Operations – Admin</title>
+  <style>
+    /* ===== YOUR ORIGINAL CSS (UNCHANGED) ===== */
+    body { font-family: Arial, sans-serif; background:#f4f6f8; padding:20px; }
+    h2 { text-align:center; }
+    .image-holder{width:100%;height:180px;border-radius:8px;overflow:hidden;margin-bottom:20px;}
+    .image-holder img{width:100%;height:100%;object-fit:cover;}
+    .staff-header{background:#2f7d32;color:white;padding:10px;border-radius:6px;margin-top:25px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;font-weight:bold;}
+    table{width:100%;border-collapse:collapse;background:white;margin-bottom:10px;}
+    th,td{border:1px solid #ccc;padding:8px;font-size:14px;text-align:center;}
+    th{background:#2f7d32;color:white;}
+    button{padding:6px 12px;border:none;border-radius:6px;cursor:pointer;}
+    .add-btn{background:#1f2f5c;color:white;margin-bottom:15px;}
+    .edit{background:#2c5cff;color:white;}
+    .delete{background:#d63031;color:white;}
+    .status{padding:4px 10px;border-radius:12px;font-size:12px;font-weight:bold;color:white;}
+    .Pending{background:#f39c12;} .Ongoing{background:#3498db;}
+    .Completed{background:#27ae60;} .Confirmed{background:#2ecc71;}
+    .Cancelled{background:#e74c3c;} .NoUpdate{background:#7f8c8d;}
+    .modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);}
+    .modal-content{background:#fff;width:420px;margin:100px auto;padding:25px;border-radius:10px;}
+    input,select{width:100%;padding:8px;margin-bottom:8px;border-radius:6px;border:1px solid #cbd5ff;}
+    .pagination{text-align:center;margin-bottom:15px;}
+    .pagination button{margin:3px;background:#e0e0e0;}
+    .pagination button.active{background:#2f7d32;color:white;}
+    footer{background:#1f2f5c;color:white;padding:15px;text-align:center;margin-top:40px;}
+  </style>
+</head>
+
+<body>
+
+<div class="image-holder">
+  <img src="banner.png">
+</div>
+
+<h2>Internal Operations – Admin</h2>
+<button class="add-btn" onclick="openAdd()">+ Add Entry</button>
+<button class="add-btn" onclick="goToStaff()">Go to Staff View</button>
+
+<div id="tables"></div>
+
+<!-- ADD MODAL -->
+<div class="modal" id="addModal">
+  <div class="modal-content">
+    <h3>Add Entry</h3>
+    <select id="staff"><option value="">Select Staff</option><option>CHETHANA</option><option>MALATHI</option><option>ABHISHEK</option><option>POORNIMA</option><option>ASHWITHA</option></select>
+    <input type="date" id="travelDate">
+    <input id="destination" placeholder="Destination">
+    <select id="query"><option value="">Query Type</option><option>PACKAGE</option><option>PASSPORT</option><option>TICKET</option><option>VISA</option><option>HOTEL</option><option>BUS</option><option>CAB</option><option>OTHERS</option></select>
+    <input id="client" placeholder="Client Name">
+    <select id="statusSelect"><option value="">Status</option><option>Pending</option><option>Ongoing</option><option>Completed</option><option>Confirmed</option><option>Cancelled</option><option>No Update</option></select>
+    <input id="remarks" placeholder="Remarks">
+    <button onclick="saveNew()">Save</button>
+    <button onclick="closeAdd()">Cancel</button>
+  </div>
+</div>
+
+<!-- EDIT MODAL -->
+<div class="modal" id="editModal">
+  <div class="modal-content">
+    <h3>Edit</h3>
+    <select id="editStatus"><option>Pending</option><option>Ongoing</option><option>Completed</option><option>Confirmed</option><option>Cancelled</option><option>No Update</option></select>
+    <input id="editRemarks">
+    <button onclick="saveEdit()">Update</button>
+    <button onclick="closeEdit()">Cancel</button>
+  </div>
+</div>
+
+<script>
+let entries = [];
+let editId = null;
+const PER_PAGE = 10;
+let pageState = {};
+const staffList = ["CHETHANA","MALATHI","ABHISHEK","POORNIMA","ASHWITHA"];
+
+const addModal = document.getElementById("addModal");
+const editModal = document.getElementById("editModal");
+
+/* LOAD FROM BACKEND */
+async function loadEntries() {
+  const res = await fetch("/api/entries");
+  entries = await res.json();
+  render();
+}
+loadEntries();
+
+/* ADD */
+function openAdd(){ addModal.style.display="block"; }
+function closeAdd(){ addModal.style.display="none"; }
+
+async function saveNew(){
+  if(!staff.value||!travelDate.value||!destination.value||!query.value||!client.value||!statusSelect.value){
+    alert("Fill all required fields");
+    return;
+  }
+
+  await fetch("/api/entries",{
+    method:"POST",
+    headers:{ "Content-Type":"application/json" },
+    body:JSON.stringify({
+      staff:staff.value,
+      travelDate:travelDate.value,
+      destination:destination.value,
+      query:query.value,
+      client:client.value,
+      status:statusSelect.value,
+      remarks:remarks.value||"-"
+    })
+  });
+
+  closeAdd();
+  loadEntries();
+}
+
+/* EDIT */
+function openEdit(id){
+  editId = id;
+  const e = entries.find(x => x._id === id);
+  editStatus.value = e.status;
+  editRemarks.value = e.remarks;
+  editModal.style.display="block";
+}
+
+function closeEdit(){ editModal.style.display="none"; }
+
+async function saveEdit(){
+  await fetch(`/api/entries/${editId}`,{
+    method:"PUT",
+    headers:{ "Content-Type":"application/json" },
+    body:JSON.stringify({
+      status:editStatus.value,
+      remarks:editRemarks.value
+    })
+  });
+  closeEdit();
+  loadEntries();
+}
+
+/* DELETE */
+async function deleteEntry(id){
+  if(!confirm("Delete entry?")) return;
+  await fetch(`/api/entries/${id}`,{ method:"DELETE" });
+  loadEntries();
+}
+
+/* UI */
+function toggleTable(id){
+  const el=document.getElementById(id);
+  el.style.display=el.style.display==="none"?"block":"none";
+}
+
+function render(){
+  const div=document.getElementById("tables");
+  div.innerHTML="";
+
+  staffList.forEach(s=>{
+    let list=entries.filter(e=>e.staff===s);
+    if(!list.length) return;
+
+    list.sort((a,b)=>{
+      const order=["Pending","Ongoing","Confirmed","Completed","Cancelled"];
+      return order.indexOf(a.status)-order.indexOf(b.status);
+    });
+
+    pageState[s]=pageState[s]||1;
+    const start=(pageState[s]-1)*PER_PAGE;
+    const pageData=list.slice(start,start+PER_PAGE);
+
+    const tid="tbl_"+s;
+    let html=`<div class="staff-header" onclick="toggleTable('${tid}')">${s} <span>▼</span></div>
+    <div id="${tid}"><table>
+    <tr><th>SL</th><th>Date</th><th>Destination</th><th>Query</th><th>Client</th><th>Status</th><th>Remarks</th><th>Updated</th><th>Edit</th><th>Delete</th></tr>`;
+
+    pageData.forEach((e,i)=>{
+      html+=`<tr>
+      <td>${start+i+1}</td>
+      <td>${e.travelDate}</td>
+      <td>${e.destination}</td>
+      <td>${e.query}</td>
+      <td>${e.client}</td>
+      <td><span class="status ${e.status.replace(" ","")}">${e.status}</span></td>
+      <td>${e.remarks}</td>
+      <td>${e.updatedAt}</td>
+      <td><button class="edit" onclick="openEdit('${e._id}')">Edit</button></td>
+      <td><button class="delete" onclick="deleteEntry('${e._id}')">Delete</button></td>
+      </tr>`;
+    });
+
+    html+=`</table><div class="pagination">`;
+    for(let p=1;p<=Math.ceil(list.length/PER_PAGE);p++){
+      html+=`<button class="${p===pageState[s]?'active':''}" onclick="pageState['${s}']=${p};render();">${p}</button>`;
+    }
+    html+=`</div></div>`;
+    div.innerHTML+=html;
+  });
+}
+
+function goToStaff(){ window.location.href="staff.html"; }
+</script>
+
+<footer>
+  © 2025 All Rights Reserved | Vagabondz Internal Operations System
+</footer>
+
+</body>
+</html>
