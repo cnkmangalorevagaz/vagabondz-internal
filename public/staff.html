@@ -1,160 +1,253 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Staff View</title>
-  <style>
-    body {
-      font-family: Arial;
-      background: #f5f5f5;
-      padding: 20px;
-    }
+<title>Staff Operations Dashboard</title>
 
-    h2 {
-      text-align: center;
-      color: #1f2f5c;
-    }
+<style>
 
-    /* BANNER */
-    .image-holder {
-      width: 100%;
-      height: 180px;
-      border-radius: 8px;
-      overflow: hidden;
-      margin-bottom: 20px;
-    }
-
-    .image-holder img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      background: white;
-    }
-
-    th, td {
-      border: 1px solid #ccc;
-      padding: 8px;
-      font-size: 14px;
-      text-align: center;
-    }
-
-    th {
-      background: #2f7d32;
-      color: white;
-    }
-
-    .box {
-      background: white;
-      padding: 15px;
-      margin-bottom: 15px;
-      border-radius: 6px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-    }
-
-    select {
-      padding: 8px;
-    }
-
-    button {
-      padding: 8px 14px;
-      margin-left: 6px;
-      background: #2f7d32;
-      color: white;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-    }
-
-    .btn-pending { background: #f39c12; }
-    .btn-ongoing { background: #3498db; }
-
-    /* STATUS BADGES */
-    .status {
-      padding: 4px 10px;
-      border-radius: 12px;
-      font-size: 12px;
-      font-weight: bold;
-      color: white;
-      display: inline-block;
-    }
-
-    .Pending { background: #f39c12; }
-    .Ongoing { background: #3498db; }
-    .Completed { background: #27ae60; }
-    .Confirmed { background: #2ecc71; }
-    .Cancelled { background: #e74c3c; }
-    .NoUpdate { background: #7f8c8d; }
-
-    /* PAGINATION */
-    .pagination {
-      text-align: center;
-      margin: 15px 0;
-    }
-
-    .pagination button {
-      background: #e0e0e0;
-      color: #000;
-      margin: 3px;
-    }
-
-    .pagination button.active {
-      background: #2f7d32;
-      color: white;
-    }
-.motivation-line {
-  text-align: left;
-  font-size: 17px;
-  color: #1f8622;
-  margin-top: 30px;
-  margin-bottom: 0px;
-  font-weight: bold; /* ← THIS makes it bold */
+body{
+font-family: 'Segoe UI',sans-serif;
+background:#eef2f7;
+padding:20px;
+color:#333;
 }
-    footer {
-      background: #1f2f5c;
-      color: white;
-      padding: 15px;
-      text-align: center;
-      margin-top: 10px;
-      font-size: 14px;
-    }
-  </style>
+
+/* HEADER */
+
+h2{
+text-align:center;
+margin-bottom:25px;
+color:#1e293b;
+}
+
+/* BANNER */
+
+.image-holder{
+width:100%;
+height:180px;
+border-radius:10px;
+overflow:hidden;
+margin-bottom:25px;
+box-shadow:0 4px 12px rgba(0,0,0,0.1);
+}
+
+.image-holder img{
+width:100%;
+height:100%;
+object-fit:cover;
+}
+
+/* DASHBOARD PANEL */
+
+.box{
+background:white;
+padding:18px;
+border-radius:10px;
+margin-bottom:18px;
+display:flex;
+justify-content:space-between;
+flex-wrap:wrap;
+gap:10px;
+box-shadow:0 2px 8px rgba(0,0,0,0.05);
+}
+
+/* DROPDOWN */
+
+select{
+padding:8px 12px;
+border-radius:6px;
+border:1px solid #ccc;
+}
+
+/* BUTTONS */
+
+button{
+padding:8px 14px;
+border:none;
+border-radius:6px;
+cursor:pointer;
+background:#2563eb;
+color:white;
+transition:0.2s;
+}
+
+button:hover{
+opacity:0.85;
+}
+
+.btn-pending{background:#f59e0b;}
+.btn-ongoing{background:#3b82f6;}
+
+/* SEARCH */
+
+.search-box input{
+padding:8px;
+border-radius:6px;
+border:1px solid #ccc;
+width:220px;
+}
+
+/* STATUS SUMMARY */
+
+.summary-cards{
+display:flex;
+gap:15px;
+margin-bottom:15px;
+flex-wrap:wrap;
+}
+
+.card{
+flex:1;
+min-width:150px;
+background:white;
+padding:15px;
+border-radius:10px;
+box-shadow:0 2px 8px rgba(0,0,0,0.05);
+text-align:center;
+}
+
+.card h3{
+margin:0;
+font-size:20px;
+}
+
+.card p{
+margin:5px 0 0;
+font-size:13px;
+color:#555;
+}
+
+/* TABLE */
+
+table{
+width:100%;
+border-collapse:collapse;
+background:white;
+border-radius:10px;
+overflow:hidden;
+box-shadow:0 2px 10px rgba(0,0,0,0.06);
+}
+
+th,td{
+padding:10px;
+border-bottom:1px solid #eee;
+font-size:14px;
+text-align:center;
+}
+
+th{
+background:#1e293b;
+color:white;
+position:sticky;
+top:0;
+}
+
+tr:hover{
+background:#f9fafb;
+}
+
+/* STATUS BADGES */
+
+.status{
+padding:4px 10px;
+border-radius:20px;
+font-size:12px;
+font-weight:bold;
+color:white;
+}
+
+.Pending{background:#f59e0b;}
+.Ongoing{background:#3b82f6;}
+.Completed{background:#10b981;}
+.Confirmed{background:#22c55e;}
+.Cancelled{background:#ef4444;}
+.NoUpdate{background:#6b7280;}
+
+/* PAGINATION */
+
+.pagination{
+text-align:center;
+margin-top:15px;
+}
+
+.pagination button{
+background:#e5e7eb;
+color:black;
+margin:3px;
+}
+
+.pagination button.active{
+background:#2563eb;
+color:white;
+}
+
+/* FOOTER */
+
+footer{
+background:#1e293b;
+color:white;
+padding:15px;
+text-align:center;
+margin-top:25px;
+border-radius:6px;
+}
+
+</style>
 </head>
 
 <body>
 
-<!-- BANNER -->
 <div class="image-holder">
-  <img src="banner.png">
+<img src="banner.png">
 </div>
 
 <h2>Staff Operations Dashboard</h2>
 
 <div class="box">
-  <div>
-    Select Your Name:
-    <select id="staffName">
-      <option value="">Select</option>
-      <option>CHETHANA</option>
-      <option>MALATHI</option>
-      <option>ABHISHEK</option>
-      <option>POORNIMA</option>
-      <option>ASHWITHA</option>
-    </select>
-    <button onclick="filterStaff()">View My Work</button>
-  </div>
 
-  <div>
-    <button class="btn-pending" onclick="filterPending()">Pending</button>
-    <button class="btn-ongoing" onclick="filterOngoing()">Ongoing</button>
-    <button onclick="filterStaff()">Show All</button>
-  </div>
+<div>
+<select id="staffName" onchange="filterStaff()">
+<option value="">Select Staff</option>
+<option>SKJ</option>
+<option>PRAJAY</option>
+<option>CHETHANA</option>
+<option>MALATHI</option>
+<option>POORNIMA</option>
+<option>RAHUL</option>
+</select>
+
+<button onclick="loadData()">Refresh</button>
+</div>
+
+<div>
+<button class="btn-pending" onclick="filterPending()">Pending</button>
+<button class="btn-ongoing" onclick="filterOngoing()">Ongoing</button>
+<button onclick="filterStaff()">Show All</button>
+</div>
+
+<div class="search-box">
+<input type="text" placeholder="Search Client / Destination" onkeyup="searchData(this.value)">
+</div>
+
+</div>
+
+<div class="summary-cards">
+
+<div class="card">
+<h3 id="pendingCount">0</h3>
+<p>Pending</p>
+</div>
+
+<div class="card">
+<h3 id="ongoingCount">0</h3>
+<p>Ongoing</p>
+</div>
+
+<div class="card">
+<h3 id="confirmedCount">0</h3>
+<p>Confirmed</p>
+</div>
+
 </div>
 
 <table id="staffTable"></table>
@@ -162,101 +255,184 @@
 <div class="pagination" id="pagination"></div>
 
 <script>
-let data = [];
 
-async function loadData() {
-  const res = await fetch("/api/entries");
-  data = await res.json();
+let data=[];
+let currentList=[];
+let currentPage=1;
+const PER_PAGE=20;
+
+async function loadData(){
+const res=await fetch("/api/entries");
+data=await res.json();
 }
 
 loadData();
-const PER_PAGE = 20;
-let currentPage = 1;
-let currentList = [];
 
-function renderTable(list) {
-  const table = document.getElementById("staffTable");
-  const pagination = document.getElementById("pagination");
+/* SEARCH */
 
-  table.innerHTML = `
-    <tr>
-      <th>SL</th>
-      <th>Travel Date</th>
-      <th>Destination</th>
-      <th>Query Type</th>
-      <th>Client Name</th>
-      <th>Status</th>
-      <th>Remarks</th>
-      <th>Last Updated</th>
-    </tr>
-  `;
+function searchData(text){
 
-  const totalPages = Math.ceil(list.length / PER_PAGE);
-  const start = (currentPage - 1) * PER_PAGE;
-  const pageData = list.slice(start, start + PER_PAGE);
+text=text.toLowerCase();
 
-  pageData.forEach((item, index) => {
-    const row = table.insertRow();
-    row.insertCell(0).innerText = start + index + 1;
-    row.insertCell(1).innerText = item.travelDate || "-";
-    row.insertCell(2).innerText = item.destination || "-";
-    row.insertCell(3).innerText = item.query || "-";
-    row.insertCell(4).innerText = item.client || "-";
+const filtered=currentList.filter(e =>
+(e.client||"").toLowerCase().includes(text) ||
+(e.destination||"").toLowerCase().includes(text)
+);
 
-    const cls = item.status ? item.status.replace(" ", "") : "NoUpdate";
-    row.insertCell(5).innerHTML =
-      `<span class="status ${cls}">${item.status || "No Update"}</span>`;
+renderTable(filtered);
 
-    row.insertCell(6).innerText = item.remarks || "-";
-    row.insertCell(7).innerText = item.updatedAt || "-";
-  });
-
-  pagination.innerHTML = "";
-  for (let p = 1; p <= totalPages; p++) {
-    pagination.innerHTML +=
-      `<button class="${p === currentPage ? "active" : ""}"
-        onclick="currentPage=${p};renderTable(currentList)">${p}</button>`;
-  }
 }
 
-function baseFilter(name) {
-  return data
-    .filter(d => d.staff === name)
-    .sort((a, b) => {
-      const order = ["Pending","Ongoing","Confirmed","Completed","Cancelled"];
-      return order.indexOf(a.status) - order.indexOf(b.status);
-    });
+/* BASE FILTER */
+
+function baseFilter(name){
+
+return data
+.filter(d=>d.staff===name)
+.sort((a,b)=>{
+const order=["Pending","Ongoing","Confirmed","Completed","Cancelled"];
+return order.indexOf(a.status)-order.indexOf(b.status);
+});
+
 }
 
-function filterStaff() {
-  const name = staffName.value;
-  if (!name) return alert("Please select your name");
-  currentPage = 1;
-  currentList = baseFilter(name);
-  renderTable(currentList);
+/* FILTER STAFF */
+
+function filterStaff(){
+
+const name=staffName.value;
+if(!name) return;
+
+currentPage=1;
+currentList=baseFilter(name);
+
+updateSummary(currentList);
+renderTable(currentList);
+
 }
 
-function filterPending() {
-  const name = staffName.value;
-  if (!name) return alert("Please select your name first");
-  currentPage = 1;
-  currentList = baseFilter(name).filter(d => d.status === "Pending");
-  renderTable(currentList);
+/* FILTERS */
+
+function filterPending(){
+
+const name=staffName.value;
+if(!name) return alert("Select staff first");
+
+currentList=baseFilter(name).filter(d=>d.status==="Pending");
+updateSummary(currentList);
+renderTable(currentList);
+
 }
 
-function filterOngoing() {
-  const name = staffName.value;
-  if (!name) return alert("Please select your name first");
-  currentPage = 1;
-  currentList = baseFilter(name).filter(d => d.status === "Ongoing");
-  renderTable(currentList);
+function filterOngoing(){
+
+const name=staffName.value;
+if(!name) return alert("Select staff first");
+
+currentList=baseFilter(name).filter(d=>d.status==="Ongoing");
+updateSummary(currentList);
+renderTable(currentList);
+
 }
+
+/* SUMMARY */
+
+function updateSummary(list){
+
+const pending=list.filter(e=>e.status==="Pending").length;
+const ongoing=list.filter(e=>e.status==="Ongoing").length;
+const confirmed=list.filter(e=>e.status==="Confirmed").length;
+
+document.getElementById("pendingCount").innerText=pending;
+document.getElementById("ongoingCount").innerText=ongoing;
+document.getElementById("confirmedCount").innerText=confirmed;
+
+}
+
+/* TABLE */
+function formatDateTime(dateString){
+
+const d = new Date(dateString);
+
+const day = d.getDate();
+
+const months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+
+const month = months[d.getMonth()];
+
+let hours = d.getHours();
+let minutes = d.getMinutes();
+
+const ampm = hours >= 12 ? "PM" : "AM";
+
+hours = hours % 12;
+hours = hours ? hours : 12;
+
+minutes = minutes < 10 ? "0"+minutes : minutes;
+
+return `${day} ${month} | ${hours}:${minutes} ${ampm}`;
+
+}
+function renderTable(list){
+
+const table=document.getElementById("staffTable");
+const pagination=document.getElementById("pagination");
+
+table.innerHTML=`
+<tr>
+<th>SL</th>
+<th>Query Date</th>
+<th>Travel Date</th>
+<th>Destination</th>
+<th>Query</th>
+<th>Client</th>
+<th>Status</th>
+<th>Remarks</th>
+<th>Updated</th>
+</tr>
+`;
+
+const totalPages=Math.ceil(list.length/PER_PAGE);
+const start=(currentPage-1)*PER_PAGE;
+const pageData=list.slice(start,start+PER_PAGE);
+
+pageData.forEach((item,index)=>{
+
+const row=table.insertRow();
+
+row.insertCell(0).innerText=start+index+1;
+row.insertCell(1).innerText=item.queryDate||"-";
+row.insertCell(2).innerText=item.travelDate||"-";
+row.insertCell(3).innerText=item.destination||"-";
+row.insertCell(4).innerText=item.query||"-";
+row.insertCell(5).innerText=item.client||"-";
+
+const cls=item.status?item.status.replace(" ",""):"NoUpdate";
+
+row.insertCell(6).innerHTML=`<span class="status ${cls}">${item.status||"No Update"}</span>`;
+
+row.insertCell(7).innerText=item.remarks||"-";
+
+row.insertCell(8).innerText = formatDateTime(item.updatedAt);
+
+});
+
+pagination.innerHTML="";
+
+for(let p=1;p<=totalPages;p++){
+
+pagination.innerHTML+=
+`<button class="${p===currentPage?'active':''}"
+onclick="currentPage=${p};renderTable(currentList)">${p}</button>`;
+
+}
+
+}
+
 </script>
-<div class="motivation-line">
- Consistency is the key to success.
-</div>
+
 <footer>
-  © 2025 All Rights Reserved | Vagabondz Internal Operations System
+© 2025 Vagabondz Internal Operations System
 </footer>
 
 </body>

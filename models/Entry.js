@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 const EntrySchema = new mongoose.Schema(
   {
     staff: { type: String, required: true },
+    queryDate: { type: String, required: true },
     travelDate: { type: String, required: true },
     destination: { type: String, required: true },
     query: { type: String, required: true },

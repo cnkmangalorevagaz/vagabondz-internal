@@ -20,34 +20,13 @@
     .Pending{background:#f39c12;} .Ongoing{background:#3498db;}
     .Completed{background:#27ae60;} .Confirmed{background:#2ecc71;}
     .Cancelled{background:#e74c3c;} .NoUpdate{background:#7f8c8d;}
-    .modal{
-  display:none;
-  position:fixed;
-  inset:0;
-  background:rgba(0,0,0,0.4);
-  overflow-y:auto;
-}
-.modal-content{
-  background:#fff;
-  width:420px;
-  margin:60px auto;
-  padding:25px;
-  border-radius:10px;
-  max-height:80vh;
-  overflow-y:auto;
-}    input,select{width:100%;padding:8px;margin-bottom:8px;border-radius:6px;border:1px solid #cbd5ff;}
+    .modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);}
+    .modal-content{background:#fff;width:420px;margin:100px auto;padding:25px;border-radius:10px;}
+    input,select{width:100%;padding:8px;margin-bottom:8px;border-radius:6px;border:1px solid #cbd5ff;}
     .pagination{text-align:center;margin-bottom:15px;}
     .pagination button{margin:3px;background:#e0e0e0;}
     .pagination button.active{background:#2f7d32;color:white;}
     footer{background:#1f2f5c;color:white;padding:15px;text-align:center;margin-top:40px;}
-    label{
-  font-size:13px;
-  font-weight:bold;
-  display:block;
-  margin-top:8px;
-  margin-bottom:3px;
-  color:#333;
-}
   </style>
 </head>
 
@@ -70,7 +49,6 @@
     text-align: center;
     box-shadow: 0 15px 40px rgba(0,0,0,0.25);
   ">
-  
     
     <!-- HEADER -->
     <h2 style="
@@ -151,57 +129,13 @@
 <div class="modal" id="addModal">
   <div class="modal-content">
     <h3>Add Entry</h3>
-
-    <label>Staff</label>
-    <select id="staff">
-      <option value="">Select Staff</option>
-      <option>SKJ</option>
-      <option>PRAJAY</option>
-      <option>CHETHANA</option>
-      <option>MALATHI</option>
-      <option>POORNIMA</option>
-      <option>RAHUL</option>
-    </select>
-
-    <label>Query Date</label>
-    <input type="date" id="queryDate">
-
-    <label>Travel Date</label>
+    <select id="staff"><option value="">Select Staff</option><option>CHETHANA</option><option>MALATHI</option><option>ABHISHEK</option><option>POORNIMA</option><option>ASHWITHA</option></select>
     <input type="date" id="travelDate">
-
-    <label>Destination</label>
-    <input id="destination" placeholder="Enter destination">
-
-    <label>Query Type</label>
-    <select id="query">
-      <option value="">Select Query Type</option>
-      <option>PACKAGE</option>
-      <option>PASSPORT</option>
-      <option>TICKET</option>
-      <option>VISA</option>
-      <option>HOTEL</option>
-      <option>BUS</option>
-      <option>CAB</option>
-      <option>OTHERS</option>
-    </select>
-
-    <label>Client Name</label>
-    <input id="client" placeholder="Enter client name">
-
-    <label>Status</label>
-    <select id="statusSelect">
-      <option value="">Select Status</option>
-      <option>Pending</option>
-      <option>Ongoing</option>
-      <option>Completed</option>
-      <option>Confirmed</option>
-      <option>Cancelled</option>
-      <option>No Update</option>
-    </select>
-
-    <label>Remarks</label>
-    <input id="remarks" placeholder="Enter remarks">
-
+    <input id="destination" placeholder="Destination">
+    <select id="query"><option value="">Query Type</option><option>PACKAGE</option><option>PASSPORT</option><option>TICKET</option><option>VISA</option><option>HOTEL</option><option>BUS</option><option>CAB</option><option>OTHERS</option></select>
+    <input id="client" placeholder="Client Name">
+    <select id="statusSelect"><option value="">Status</option><option>Pending</option><option>Ongoing</option><option>Completed</option><option>Confirmed</option><option>Cancelled</option><option>No Update</option></select>
+    <input id="remarks" placeholder="Remarks">
     <button onclick="saveNew()">Save</button>
     <button onclick="closeAdd()">Cancel</button>
   </div>
@@ -212,27 +146,19 @@
   <div class="modal-content">
     <h3>Edit Entry</h3>
 
-<label>Travel Date</label>
-<input type="date" id="editTravelDate">
+    <input id="editDestination" placeholder="Destination">
+    <input id="editClient" placeholder="Client Name">
 
-<label>Destination</label>
-<input id="editDestination" placeholder="Destination">
+    <select id="editStatus">
+      <option>Pending</option>
+      <option>Ongoing</option>
+      <option>Completed</option>
+      <option>Confirmed</option>
+      <option>Cancelled</option>
+      <option>No Update</option>
+    </select>
 
-<label>Client Name</label>
-<input id="editClient" placeholder="Client Name">
-
-<label>Status</label>
-<select id="editStatus">
-  <option>Pending</option>
-  <option>Ongoing</option>
-  <option>Completed</option>
-  <option>Confirmed</option>
-  <option>Cancelled</option>
-  <option>No Update</option>
-</select>
-
-<label>Remarks</label>
-<input id="editRemarks" placeholder="Remarks">
+    <input id="editRemarks" placeholder="Remarks">
 
     <button onclick="saveEdit()">Update</button>
     <button onclick="closeEdit()">Cancel</button>
@@ -244,7 +170,7 @@ let entries = [];
 let editId = null;
 const PER_PAGE = 10;
 let pageState = {};
-const staffList = ["SKJ","PRAJAY","CHETHANA","MALATHI","POORNIMA","RAHUL"];
+const staffList = ["CHETHANA","MALATHI","ABHISHEK","POORNIMA","ASHWITHA"];
 
 const addModal = document.getElementById("addModal");
 const editModal = document.getElementById("editModal");
@@ -271,15 +197,14 @@ async function saveNew(){
     method:"POST",
     headers:{ "Content-Type":"application/json" },
     body:JSON.stringify({
-  staff:staff.value,
-  queryDate:queryDate.value,
-  travelDate:travelDate.value,
-  destination:destination.value,
-  query:query.value,
-  client:client.value,
-  status:statusSelect.value,
-  remarks:remarks.value||"-"
-})
+      staff:staff.value,
+      travelDate:travelDate.value,
+      destination:destination.value,
+      query:query.value,
+      client:client.value,
+      status:statusSelect.value,
+      remarks:remarks.value||"-"
+    })
   });
 
   closeAdd();
@@ -291,7 +216,6 @@ function openEdit(id){
   editId = id;
   const e = entries.find(x => x._id === id);
 
-  editTravelDate.value = e.travelDate;
   editDestination.value = e.destination;
   editClient.value = e.client;
   editStatus.value = e.status;
@@ -307,7 +231,6 @@ async function saveEdit(){
     method:"PUT",
     headers:{ "Content-Type":"application/json" },
     body:JSON.stringify({
-      travelDate: editTravelDate.value,
   destination: editDestination.value,
   client: editClient.value,
   status: editStatus.value,
@@ -330,29 +253,7 @@ function toggleTable(id){
   const el=document.getElementById(id);
   el.style.display=el.style.display==="none"?"block":"none";
 }
-function formatDateTime(dateString){
 
-const d = new Date(dateString);
-
-const day = d.getDate();
-
-const months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
-
-const month = months[d.getMonth()];
-
-let hours = d.getHours();
-let minutes = d.getMinutes();
-
-const ampm = hours >= 12 ? "PM" : "AM";
-
-hours = hours % 12;
-hours = hours ? hours : 12;
-
-minutes = minutes < 10 ? "0"+minutes : minutes;
-
-return `${day} ${month} | ${hours}:${minutes} ${ampm}`;
-
-}
 function render(){
   const div=document.getElementById("tables");
   div.innerHTML="";
@@ -373,22 +274,18 @@ function render(){
     const tid="tbl_"+s;
     let html=`<div class="staff-header" onclick="toggleTable('${tid}')">${s} <span>▼</span></div>
     <div id="${tid}"><table>
-    <tr><th>SL</th>
-<th>Query Date</th>
-<th>Travel Date</th>
-<th>Destination</th><th>Query</th><th>Client</th><th>Status</th><th>Remarks</th><th>Updated</th><th>Edit</th><th>Delete</th></tr>`;
+    <tr><th>SL</th><th>Date</th><th>Destination</th><th>Query</th><th>Client</th><th>Status</th><th>Remarks</th><th>Updated</th><th>Edit</th><th>Delete</th></tr>`;
 
     pageData.forEach((e,i)=>{
       html+=`<tr>
       <td>${start+i+1}</td>
-      <td>${e.queryDate || "-"}</td>
       <td>${e.travelDate}</td>
       <td>${e.destination}</td>
       <td>${e.query}</td>
       <td>${e.client}</td>
       <td><span class="status ${e.status.replace(" ","")}">${e.status}</span></td>
       <td>${e.remarks}</td>
-      <td>${formatDateTime(e.updatedAt)}</td>
+      <td>${e.updatedAt}</td>
       <td><button class="edit" onclick="openEdit('${e._id}')">Edit</button></td>
       <td><button class="delete" onclick="deleteEntry('${e._id}')">Delete</button></td>
       </tr>`;
