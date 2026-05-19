@@ -1,256 +1,179 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Staff Operations Dashboard</title>
+<title>Vagabondz Staff Dashboard</title>
 
-<style>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-body{
-font-family: 'Segoe UI',sans-serif;
-background:#eef2f7;
-padding:20px;
-color:#333;
-}
-
-/* HEADER */
-
-h2{
-text-align:center;
-margin-bottom:25px;
-color:#1e293b;
-}
-
-/* BANNER */
-
-.image-holder{
-width:100%;
-height:180px;
-border-radius:10px;
-overflow:hidden;
-margin-bottom:25px;
-box-shadow:0 4px 12px rgba(0,0,0,0.1);
-}
-
-.image-holder img{
-width:100%;
-height:100%;
-object-fit:cover;
-}
-
-/* DASHBOARD PANEL */
-
-.box{
-background:white;
-padding:18px;
-border-radius:10px;
-margin-bottom:18px;
-display:flex;
-justify-content:space-between;
-flex-wrap:wrap;
-gap:10px;
-box-shadow:0 2px 8px rgba(0,0,0,0.05);
-}
-
-/* DROPDOWN */
-
-select{
-padding:8px 12px;
-border-radius:6px;
-border:1px solid #ccc;
-}
-
-/* BUTTONS */
-
-button{
-padding:8px 14px;
-border:none;
-border-radius:6px;
-cursor:pointer;
-background:#2563eb;
-color:white;
-transition:0.2s;
-}
-
-button:hover{
-opacity:0.85;
-}
-
-.btn-pending{background:#f59e0b;}
-.btn-ongoing{background:#3b82f6;}
-
-/* SEARCH */
-
-.search-box input{
-padding:8px;
-border-radius:6px;
-border:1px solid #ccc;
-width:220px;
-}
-
-/* STATUS SUMMARY */
-
-.summary-cards{
-display:flex;
-gap:15px;
-margin-bottom:15px;
-flex-wrap:wrap;
-}
-
-.card{
-flex:1;
-min-width:150px;
-background:white;
-padding:15px;
-border-radius:10px;
-box-shadow:0 2px 8px rgba(0,0,0,0.05);
-text-align:center;
-}
-
-.card h3{
-margin:0;
-font-size:20px;
-}
-
-.card p{
-margin:5px 0 0;
-font-size:13px;
-color:#555;
-}
-
-/* TABLE */
-
-table{
-width:100%;
-border-collapse:collapse;
-background:white;
-border-radius:10px;
-overflow:hidden;
-box-shadow:0 2px 10px rgba(0,0,0,0.06);
-}
-
-th,td{
-padding:10px;
-border-bottom:1px solid #eee;
-font-size:14px;
-text-align:center;
-}
-
-th{
-background:#1e293b;
-color:white;
-position:sticky;
-top:0;
-}
-
-tr:hover{
-background:#f9fafb;
-}
-
-/* STATUS BADGES */
-
-.status{
-padding:4px 10px;
-border-radius:20px;
-font-size:12px;
-font-weight:bold;
-color:white;
-}
-
-.Pending{background:#f59e0b;}
-.Ongoing{background:#3b82f6;}
-.Completed{background:#10b981;}
-.Confirmed{background:#22c55e;}
-.Cancelled{background:#ef4444;}
-.NoUpdate{background:#6b7280;}
-
-/* PAGINATION */
-
-.pagination{
-text-align:center;
-margin-top:15px;
-}
-
-.pagination button{
-background:#e5e7eb;
-color:black;
-margin:3px;
-}
-
-.pagination button.active{
-background:#2563eb;
-color:white;
-}
-
-/* FOOTER */
-
-footer{
-background:#1e293b;
-color:white;
-padding:15px;
-text-align:center;
-margin-top:25px;
-border-radius:6px;
-}
-
-</style>
+<link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-<div class="image-holder">
-<img src="banner.png">
+<!-- HERO SECTION -->
+
+<div class="dashboard-hero">
+
+<div class="hero-overlay"></div>
+
+<div class="live-badge">
+● LIVE
 </div>
 
-<h2>Staff Operations Dashboard</h2>
+<div class="hero-content">
 
-<div class="box">
+<h1>
+✈ Vagabondz Staff Dashboard
+</h1>
 
-<div>
+<p>
+Smart travel operations & staff workflow management
+</p>
+
+<!-- CONTROLS -->
+
+<div class="hero-controls">
+
 <select id="staffName" onchange="filterStaff()">
-<option value="">Select Staff</option>
+
+<option value="">Who’s Exploring Today?</option>
+
 <option>SKJ</option>
 <option>PRAJAY</option>
 <option>CHETHANA</option>
 <option>MALATHI</option>
 <option>POORNIMA</option>
 <option>RAHUL</option>
+<option>VIJETHA</option>
+
 </select>
 
-<button onclick="loadData()">Refresh</button>
-</div>
+<div class="search-wrapper">
 
-<div>
-<button class="btn-pending" onclick="filterPending()">Pending</button>
-<button class="btn-ongoing" onclick="filterOngoing()">Ongoing</button>
-<button onclick="filterStaff()">Show All</button>
-</div>
+<span>🔍</span>
 
-<div class="search-box">
-<input type="text" placeholder="Search Client / Destination" onkeyup="searchData(this.value)">
-</div>
+<input
+type="text"
+placeholder="Search Client / Destination"
+onkeyup="searchData(this.value)"
+>
 
 </div>
 
-<div class="summary-cards">
+</div>
 
-<div class="card">
+<!-- MINI CARDS -->
+
+<div class="mini-summary">
+
+<div class="mini-card pending-card"
+onclick="filterPending()">
+
+<div class="mini-icon">
+📋
+</div>
+
+<div class="mini-info">
+
+<div class="mini-top">
+
+<span>Pending</span>
+
 <h3 id="pendingCount">0</h3>
-<p>Pending</p>
+
 </div>
 
-<div class="card">
+<small>View pending tasks →</small>
+
+</div>
+
+</div>
+
+<div class="mini-card ongoing-card"
+onclick="filterOngoing()">
+
+<div class="mini-icon">
+⏳
+</div>
+
+<div class="mini-info">
+
+<div class="mini-top">
+
+<span>Ongoing</span>
+
 <h3 id="ongoingCount">0</h3>
-<p>Ongoing</p>
+
 </div>
 
-<div class="card">
+<small>View active work →</small>
+
+</div>
+
+</div>
+
+<div class="mini-card confirmed-card"
+onclick="filterConfirmed()">
+
+<div class="mini-icon">
+✅
+</div>
+
+<div class="mini-info">
+
+<div class="mini-top">
+
+<span>Confirmed</span>
+
 <h3 id="confirmedCount">0</h3>
-<p>Confirmed</p>
+
+</div>
+
+<small>View confirmed tasks →</small>
+
+</div>
+
 </div>
 
 </div>
 
-<table id="staffTable"></table>
+</div>
+
+</div>
+
+<!-- TABLE -->
+
+<div class="table-container">
+
+<table id="staffTable">
+
+<tr>
+
+<th>SL</th>
+
+<th>📅 QUERY DATE</th>
+
+<th>✈ TRAVEL DATE</th>
+
+<th>📍 DESTINATION</th>
+
+<th>💬 QUERY</th>
+
+<th>👤 CLIENT</th>
+
+<th>🏳 STATUS</th>
+
+<th>💭 REMARKS</th>
+
+<th>🕒 UPDATED</th>
+
+</tr>
+
+</table>
+
+</div>
+
+<!-- PAGINATION -->
 
 <div class="pagination" id="pagination"></div>
 
@@ -259,11 +182,17 @@ border-radius:6px;
 let data=[];
 let currentList=[];
 let currentPage=1;
+
 const PER_PAGE=20;
 
+/* LOAD DATA */
+
 async function loadData(){
+
 const res=await fetch("/api/entries");
+
 data=await res.json();
+
 }
 
 loadData();
@@ -275,23 +204,39 @@ function searchData(text){
 text=text.toLowerCase();
 
 const filtered=currentList.filter(e =>
+
 (e.client||"").toLowerCase().includes(text) ||
+
 (e.destination||"").toLowerCase().includes(text)
+
 );
 
 renderTable(filtered);
 
 }
+function filterConfirmed(){
 
+const filtered=currentList.filter(
+e=>e.status==="Confirmed"
+);
+
+renderTable(filtered);
+
+}
 /* BASE FILTER */
 
 function baseFilter(name){
 
 return data
+
 .filter(d=>d.staff===name)
+
 .sort((a,b)=>{
+
 const order=["Pending","Ongoing","Confirmed","Completed","Cancelled"];
+
 return order.indexOf(a.status)-order.indexOf(b.status);
+
 });
 
 }
@@ -300,38 +245,37 @@ return order.indexOf(a.status)-order.indexOf(b.status);
 
 function filterStaff(){
 
-const name=staffName.value;
+const name=document.getElementById("staffName").value;
+
 if(!name) return;
 
 currentPage=1;
+
 currentList=baseFilter(name);
 
 updateSummary(currentList);
+
 renderTable(currentList);
 
 }
 
-/* FILTERS */
+/* PENDING FILTER */
 
 function filterPending(){
 
-const name=staffName.value;
-if(!name) return alert("Select staff first");
+const filtered=currentList.filter(e=>e.status==="Pending");
 
-currentList=baseFilter(name).filter(d=>d.status==="Pending");
-updateSummary(currentList);
-renderTable(currentList);
+renderTable(filtered);
 
 }
 
+/* ONGOING FILTER */
+
 function filterOngoing(){
 
-const name=staffName.value;
-if(!name) return alert("Select staff first");
+const filtered=currentList.filter(e=>e.status==="Ongoing");
 
-currentList=baseFilter(name).filter(d=>d.status==="Ongoing");
-updateSummary(currentList);
-renderTable(currentList);
+renderTable(filtered);
 
 }
 
@@ -339,61 +283,82 @@ renderTable(currentList);
 
 function updateSummary(list){
 
-const pending=list.filter(e=>e.status==="Pending").length;
-const ongoing=list.filter(e=>e.status==="Ongoing").length;
-const confirmed=list.filter(e=>e.status==="Confirmed").length;
+document.getElementById("pendingCount").innerText =
 
-document.getElementById("pendingCount").innerText=pending;
-document.getElementById("ongoingCount").innerText=ongoing;
-document.getElementById("confirmedCount").innerText=confirmed;
+list.filter(e=>e.status==="Pending").length;
+
+document.getElementById("ongoingCount").innerText =
+
+list.filter(e=>e.status==="Ongoing").length;
+
+document.getElementById("confirmedCount").innerText =
+
+list.filter(e=>e.status==="Confirmed").length;
 
 }
 
-/* TABLE */
+/* DATE FORMAT */
+
 function formatDateTime(dateString){
 
-const d = new Date(dateString);
+if(!dateString) return "-";
 
-const day = d.getDate();
+const d=new Date(dateString);
 
-const months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+const day=d.getDate();
 
-const month = months[d.getMonth()];
+const months=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
 
-let hours = d.getHours();
-let minutes = d.getMinutes();
+const month=months[d.getMonth()];
 
-const ampm = hours >= 12 ? "PM" : "AM";
+let hours=d.getHours();
 
-hours = hours % 12;
-hours = hours ? hours : 12;
+let minutes=d.getMinutes();
 
-minutes = minutes < 10 ? "0"+minutes : minutes;
+const ampm=hours>=12 ? "PM" : "AM";
+
+hours=hours%12 || 12;
+
+minutes=minutes<10 ? "0"+minutes : minutes;
 
 return `${day} ${month} | ${hours}:${minutes} ${ampm}`;
 
 }
+
+/* TABLE */
+
 function renderTable(list){
 
 const table=document.getElementById("staffTable");
-const pagination=document.getElementById("pagination");
 
 table.innerHTML=`
+
 <tr>
+
 <th>SL</th>
+
 <th>Query Date</th>
+
 <th>Travel Date</th>
+
 <th>Destination</th>
+
 <th>Query</th>
+
 <th>Client</th>
+
 <th>Status</th>
+
 <th>Remarks</th>
+
 <th>Updated</th>
+
 </tr>
+
 `;
 
-const totalPages=Math.ceil(list.length/PER_PAGE);
 const start=(currentPage-1)*PER_PAGE;
+
 const pageData=list.slice(start,start+PER_PAGE);
 
 pageData.forEach((item,index)=>{
@@ -401,38 +366,129 @@ pageData.forEach((item,index)=>{
 const row=table.insertRow();
 
 row.insertCell(0).innerText=start+index+1;
-row.insertCell(1).innerText=item.queryDate||"-";
-row.insertCell(2).innerText=item.travelDate||"-";
-row.insertCell(3).innerText=item.destination||"-";
-row.insertCell(4).innerText=item.query||"-";
-row.insertCell(5).innerText=item.client||"-";
 
-const cls=item.status?item.status.replace(" ",""):"NoUpdate";
+row.insertCell(1).innerText=item.queryDate || "-";
 
-row.insertCell(6).innerHTML=`<span class="status ${cls}">${item.status||"No Update"}</span>`;
+row.insertCell(2).innerText=item.travelDate || "-";
 
-row.insertCell(7).innerText=item.remarks||"-";
+row.insertCell(3).innerText=item.destination || "-";
 
-row.insertCell(8).innerText = formatDateTime(item.updatedAt);
+row.insertCell(4).innerText=item.query || "-";
+
+row.insertCell(5).innerText=item.client || "-";
+
+const cls=item.status
+? item.status.replace(" ","")
+: "NoUpdate";
+
+row.insertCell(6).innerHTML=`
+
+<span class="status ${cls}">
+
+${item.status || "No Update"}
+
+</span>
+
+`;
+
+/* REMARKS */
+
+const remarksCell=row.insertCell(7);
+
+remarksCell.innerHTML=`
+
+<div class="remark-box">
+
+${(item.remarks || "-").replace(/\n/g,"<br>")}
+
+</div>
+
+`;
+
+row.insertCell(8).innerText=formatDateTime(item.updatedAt);
 
 });
-
-pagination.innerHTML="";
-
-for(let p=1;p<=totalPages;p++){
-
-pagination.innerHTML+=
-`<button class="${p===currentPage?'active':''}"
-onclick="currentPage=${p};renderTable(currentList)">${p}</button>`;
-
-}
 
 }
 
 </script>
 
 <footer>
-© 2025 Vagabondz Internal Operations System
+
+<div class="footer-bg"></div>
+
+<div class="footer-content">
+
+<!-- LEFT LOGO -->
+
+<div class="footer-left">
+
+<img src="logo.png" class="full-footer-logo">
+
+</div>
+
+<!-- CENTER QUOTE -->
+
+<div class="footer-center">
+
+<span class="quote-mark">❝</span>
+
+<div class="quote-text">
+
+<p>
+Jobs fill your pocket,
+</p>
+
+<p>
+but <span>adventures</span> fill your soul.
+</p>
+
+</div>
+
+<span class="quote-mark">❞</span>
+
+</div>
+
+<!-- RIGHT LINKS -->
+
+<div class="footer-right">
+
+<div class="footer-item">
+
+<span>🌍</span>
+
+<p>Explore More</p>
+
+</div>
+
+<div class="footer-item">
+
+<span>🧭</span>
+
+<p>Travel Better</p>
+
+</div>
+
+<div class="footer-item">
+
+<span>✈️</span>
+
+<p>Grow Together</p>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- BOTTOM -->
+
+<div class="footer-bottom">
+
+© 2026 Vagabondz Internal Operations System
+
+</div>
+
 </footer>
 
 </body>
